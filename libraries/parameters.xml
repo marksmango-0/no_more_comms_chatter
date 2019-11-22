@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+<!--
+	<replace sel="/parameters/scriptparams/category[@name='voice']/param[@name='chatter_range_docking']">
+		<param name="chatter_range_docking" value="1km" />
+	</replace>
+	<replace sel="/parameters/scriptparams/category[@name='voice']/param[@name='chatter_range_normal']">
+		<param name="chatter_range_normal" value="1km" />
+	</replace>
+	<replace sel="/parameters/scriptparams/category[@name='voice']/param[@name='chatter_range_extended']">
+		<param name="chatter_range_extended" value="1km" />
+	</replace>
+	-->
+</diff>

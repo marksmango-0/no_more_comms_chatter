@@ -1,0 +1,197 @@
+ <diff>
+	<replace sel="//signal_cue_instantly[contains( @param , '$InspectCargo_Police_Comply_Legal' )]">
+				<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$InspectCargo_Police_Comply_Legal',
+                $priority = 30, $chance = 100, $repeattimeout = 1min,
+                $locations = [ '$InspectorLocation', '$InspectedLocation' ],
+                $actors = [
+                  table[ $name = '$Inspector', $location = '$InspectorLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Inspected', $location = '$InspectedLocation', $filter = [controlpost.aipilot] ],
+                ],
+                $script = [
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ship scan warning - cargo)' ],
+                  table[ $select = [
+                    table[ $weight = 1.5, $actor = '$Inspected', $recipient = '$Inspector', $comment = '(ship scanned by police - compliant)' ],
+                    0.7s,
+                  ] ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ship scan result - nothing found)' ],
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $chance = 30, $comment = '(ship scanned by police - nothing found)' ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$InspectCargo_Police_Comply_Illegal' )]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$InspectCargo_Police_Comply_Illegal',
+                $priority = 30, $chance = 0, $repeattimeout = 1min,
+                $locations = [ '$InspectorLocation', '$InspectedLocation' ],
+                $actors = [
+                  table[ $name = '$Inspector', $location = '$InspectorLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Inspected', $location = '$InspectedLocation', $filter = [controlpost.aipilot] ],
+                ],
+                $script = [
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ship scan warning - cargo)' ],
+                  table[ $select = [
+                    table[ $weight = 0.25, $actor = '$Inspected', $recipient = '$Inspector', $comment = '(ship scanned by police - compliant)' ],
+                    0.7s,
+                  ] ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ship scan result - something found)' ],
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $chance = 15, $comment = '(ship scanned by police - something found)' ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ordering to drop cargo/contraband)' ],
+                  0.5s,
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $chance = 80, $comment = 'Releasing cargo now. -or- Okay.' ],
+                  0.3s,
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 30, $comment = '(ship complies to police instructions)' ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$InspectCargo_Police_Refuse')]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$InspectCargo_Police_Refuse',
+                $priority = 30, $chance = 0, $repeattimeout = 1min,
+                $locations = [ '$InspectorLocation', '$InspectedLocation' ],
+                $actors = [
+                  table[ $name = '$Inspector', $location = '$InspectorLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Inspected', $location = '$InspectedLocation', $filter = [controlpost.aipilot] ],
+                ],
+                $script = [
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(ship scan warning - cargo)' ],
+                  table[ $select = [
+                    table[ $weight = 1.5, $actor = '$Inspected', $recipient = '$Inspector', $comment = '(refusal to do something)' ],
+                    0.7s,
+                  ] ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 30, $comment = '(ship does not comply)' ],
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $filter = table[$Inspected=[faction.criminal]], $chance = 30, $comment = '(criminal cursing)' ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$InspectCargo_Pirate_Comply' )]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$InspectCargo_Pirate_Comply',
+                $priority = 30, $chance = 0, $repeattimeout = 1min,
+                $locations = [ '$InspectorLocation', '$InspectedLocation' ],
+                $actors = [
+                  table[ $name = '$Inspector', $location = '$InspectorLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Inspected', $location = '$InspectedLocation', $filter = [controlpost.aipilot] ],
+                ],
+                $script = [
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 20, $comment = '(ship scan warning, pirate case)' ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(pirate requesting to drop cargo)' ],
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $comment = '(ordered to drop cargo - releases under duress)' ],
+                  0.4s,
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 50, $comment = '(ship complies to pirate instructions)' ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$InspectCargo_Pirate_Refuse' )]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$InspectCargo_Pirate_Refuse',
+                $priority = 30, $chance = 100, $repeattimeout = 1min,
+                $locations = [ '$InspectorLocation', '$InspectedLocation' ],
+                $actors = [
+                  table[ $name = '$Inspector', $location = '$InspectorLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Inspected', $location = '$InspectedLocation', $filter = [controlpost.aipilot] ],
+                ],
+                $script = [
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 20, $comment = '(ship scan warning, pirate case)' ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(pirate requesting to drop cargo)' ],
+                  table[ $actor = '$Inspected', $recipient = '$Inspector', $comment = '(refusal to do something)' ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $comment = '(criminal cursing)' ],
+                  table[ $actor = '$Inspector', $recipient = '$Inspected', $chance = 85, $comment = '(retaliate)' ],
+                ]
+              ]" />
+	</replace>
+	
+	<replace sel="//signal_cue_instantly[contains( @param , '$Combat_Large_Attacked_PleadForLife' )]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$Combat_Large_Attacked_PleadForLife',
+                $priority = 25, $chance = 100, $repeattimeout = 2min,
+                $locations = [ '$AttackedLocation', '$AttackerLocation' ],
+                $actors = [
+                  table[ $name = '$Captain', $location = '$AttackedLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Comms', $location = '$AttackedLocation', $filter = [entityrole.service, controlposition.comms, attention.inroom], $passive = true, $optional = true ],
+                  table[ $name = '$Attacker', $location = '$AttackerLocation', $filter = [controlpost.aipilot], $allow_player = true, $optional = true ],
+                ],
+                $script = [
+                  0.3s,
+                  table[ $actor = '$Captain', $selectspeak = [10026, 10027], $recipient = '$Attacker', $comment = 'multi-crew ship hit, life threat' ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$Combat_Small_Attacker_Taunt' )]">
+		<signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$Combat_Small_Attacker_Taunt',
+                $priority = 20, $chance = 100, $repeattimeout = 25s,
+                $locations = [ '$AttackerLocation', '$AttackedLocation' ],
+                $actors = [
+                  table[ $name = '$Attacker', $location = '$AttackerLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Attacked', $location = '$AttackedLocation', $filter = [controlpost.aipilot], $allow_player = true,  $allow_computer = true ],
+                ],
+                $selectscript = [
+                  table[ $weight = 100, $filter = table[$Attacked=['cantalk', faction.player]], $comment = 'Taunting enemy that can talk (player or NPC with speaker page)', $script = [
+                    table[ $actor = '$Attacker', $selectspeak = [10020, 10021, 10022, 10023], $recipient = '$Attacked', $comment = 'taunt line - response-capable' ],
+                    table[ $actor = '$Attacked', $excludefilter = table[$Attacked=['iscapitalship', class.station]], $selectspeak = [10068, 10069, 10070, 10071], $recipient = '$Attacker', $chance = 80, $comment = 'response to taunt - small ship' ],
+                  ] ],
+                  table[ $weight = 100, $excludefilter = table[$Attacked=['cantalk', race.xenon]], $comment = 'Taunting non-talking non-Xenon enemy', $script = [
+                    table[ $actor = '$Attacker', $recipient = '$Attacked', $comment = 'taunt line - silent enemy' ],
+                  ] ],
+                  table[ $weight = 100, $filter = table[$Attacked=[race.xenon]], $comment = 'Taunting Xenon enemy', $script = [
+                    table[ $actor = '$Attacker', $recipient = '$Attacked', $comment = 'taunt line - xenon' ],
+                    table[ $actor = '$Attacked', $recipient = '$Attacker', $chance = 0, $comment = 'TODO: Xenon noise' ],
+                  ] ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$Combat_Small_Attacked_Confident' )]">
+            <signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$Combat_Small_Attacked_Confident',
+                $priority = 20, $chance = 100, $repeattimeout = 30s,
+                $locations = [ '$AttackedLocation', '$AttackerLocation' ],
+                $actors = [
+                  table[ $name = '$Attacked', $location = '$AttackedLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Attacker', $location = '$AttackerLocation', $filter = [controlpost.aipilot], $allow_player = true, $allow_computer = true ],
+                ],
+                $selectscript = [
+                  table[ $weight = 100, $filter = table[$Attacker=['cantalk', faction.player]], $comment = 'Attacked by enemy that can talk (player or NPC with speaker page)', $script = [
+                    table[ $actor = '$Attacked', $selectspeak = [10057, 10058, 10059], $recipient = '$Attacker', $comment = 'single-crew ship hit without taking serious damage - response-capable' ],
+                    table[ $actor = '$Attacker', $excludefilter = table[$Attacker=['iscapitalship', class.station]], $selectspeak = [10064], $recipient = '$Attacked', $chance = 50, $comment = 'response - small ship' ],
+                    table[ $actor = '$Attacker', $filter = table[$Attacker=['iscapitalship']], $selectspeak = [10065], $recipient = '$Attacked', $chance = 50, $comment = 'response - big ship' ],
+                  ] ],
+                  table[ $weight = 100, $excludefilter = table[$Attacker=['cantalk', race.xenon]], $comment = 'Attacked by non-talking non-Xenon enemy', $script = [
+                    table[ $actor = '$Attacked', $recipient = '$Attacker', $comment = 'single-crew ship hit without taking serious damage - silent enemy' ],
+                  ] ],
+                  table[ $weight = 100, $filter = table[$Attacker=[race.xenon]], $comment = 'Attacked by Xenon enemy', $script = [
+                    table[ $actor = '$Attacked', $recipient = '$Attacker', $comment = 'single-crew ship hit without taking serious damage - xenon' ],
+                    table[ $actor = '$Attacker', $recipient = '$Attacked', $chance = 0, $comment = 'TODO: Xenon noise' ],
+                  ] ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$Combat_Small_Attacked_Normal' )]">  
+	            <signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$Combat_Small_Attacked_Normal',
+                $priority = 20, $chance = 60, $repeattimeout = 40s,
+                $locations = [ '$AttackedLocation', '$AttackerLocation' ],
+                $actors = [
+                  table[ $name = '$Attacked', $location = '$AttackedLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Attacker', $location = '$AttackerLocation', $filter = [controlpost.aipilot], $allow_player = true, $allow_computer = true ],
+                ],
+                $selectscript = [
+                  table[ $weight = 100, $filter = table[$Attacker=['cantalk', faction.player]], $comment = 'Attacked by enemy that can talk (player or NPC with speaker page)', $script = [
+                    table[ $actor = '$Attacked', $selectspeak = [10062, 10063], $recipient = '$Attacker', $comment = 'small ship hit, not in danger - response-capable' ],
+                    table[ $actor = '$Attacker', $excludefilter = table[$Attacker=['iscapitalship', class.station]], $selectspeak = [10064], $recipient = '$Attacked', $chance = 50, $comment = 'response - small ship' ],
+                    table[ $actor = '$Attacker', $filter = table[$Attacker=['iscapitalship']], $selectspeak = [10065], $recipient = '$Attacked', $chance = 50, $comment = 'response - big ship' ],
+                  ] ],
+                  table[ $weight = 100, $excludefilter = table[$Attacker=['cantalk']], $comment = 'Attacked by non-talking enemy', $script = [
+                    table[ $actor = '$Attacked', $recipient = '$Attacker', $comment = 'small ship hit, not in danger - response-capable (TODO: Update with correct variants)' ],
+                    table[ $actor = '$Attacker', $filter = table[$Attacker=[race.xenon]], $recipient = '$Attacked', $chance = 0, $comment = 'TODO: Xenon noise' ],
+                  ] ],
+                ]
+              ]" />
+	</replace>
+	<replace sel="//signal_cue_instantly[contains( @param , '$Combat_Small_Attacked_Danger' )]">
+	            <signal_cue_instantly cue="AddUseCaseDef" param="table[ $name = '$Combat_Small_Attacked_Danger',
+                $priority = 20, $chance = 100, $repeattimeout = 30s,
+                $locations = [ '$AttackedLocation', '$AttackerLocation' ],
+                $actors = [
+                  table[ $name = '$Attacked', $location = '$AttackedLocation', $filter = [controlpost.aipilot, attention.visible] ],
+                  table[ $name = '$Attacker', $location = '$AttackerLocation', $filter = [controlpost.aipilot, faction.player], $allow_player = true, $allow_computer = true ],
+                ],
+                $script = [
+                  table[ $actor = '$Attacked', $selectspeak = [10016, 10017, 10018, 10019], $recipient = '$Attacker', $comment = 'small ship hit, in danger, panic' ],
+                  table[ $actor = '$Attacker', $excludefilter = table[$Attacker=['iscapitalship', class.station]], $selectspeak = [10066, 10067], $recipient = '$Attacked', $chance = 80, $comment = 'response - small ship' ],
+                  table[ $actor = '$Attacker', $filter = table[$Attacker=[race.xenon]], $recipient = '$Attacked', $chance = 0, $comment = 'TODO: Xenon noise' ],
+                ]
+              ]" />
+	</replace>
+</diff>
